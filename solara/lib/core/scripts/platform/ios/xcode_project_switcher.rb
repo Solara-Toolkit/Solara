@@ -71,10 +71,14 @@ class XcodeProjectSwitcher
             raise ArgumentError, "Invalid platform: #{@platform}"
         end
 
-        File.open(debug_xcconfig_path, "w") { |file| file.write("#include? \"Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig\"") }
-        File.open(release_xcconfig_path, "w") { |file| file.write("#include? \"Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig\"") }
-        File.open(debug_xcconfig_path, "w") { |file| file.write("#include \"#{base_xcconfig_name}\"\n") }
-        File.open(release_xcconfig_path, "w") { |file| file.write("#include \"#{base_xcconfig_name}\"\n") }
+        File.open(debug_xcconfig_path, "w") { |file|
+            file.write("#include? \"Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig\"\n")
+            file.write("#include \"#{base_xcconfig_name}\"\n")
+        }
+        File.open(debug_xcconfig_path, "w") { |file|
+            file.write("#include? \"Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig\"\n")
+            file.write("#include \"#{base_xcconfig_name}\"\n")
+        }
     end
 
     def set_base_xcconfigs(debug_xcconfig_path, release_xcconfig_path)
@@ -90,7 +94,7 @@ class XcodeProjectSwitcher
 
     def add_artifacts_group
         artifacts_dir_name = FilePath.artifacts_dir_name_ios
-        
+
         case @platform
         when Platform::Flutter
             flutter_group = @project.groups.find { |group| group.name == 'Flutter' }
