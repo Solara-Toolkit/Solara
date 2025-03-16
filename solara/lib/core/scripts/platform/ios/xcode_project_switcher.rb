@@ -71,6 +71,8 @@ class XcodeProjectSwitcher
             raise ArgumentError, "Invalid platform: #{@platform}"
         end
 
+        File.open(debug_xcconfig_path, "w") { |file| file.write("#include? \"Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig\"") }
+        File.open(release_xcconfig_path, "w") { |file| file.write("#include? \"Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig\"") }
         File.open(debug_xcconfig_path, "w") { |file| file.write("#include \"#{base_xcconfig_name}\"\n") }
         File.open(release_xcconfig_path, "w") { |file| file.write("#include \"#{base_xcconfig_name}\"\n") }
     end
